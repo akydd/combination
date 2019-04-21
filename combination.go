@@ -2,31 +2,34 @@ package combination
 
 import (
 	"time"
-
-	"gonum.org/v1/gonum/stat/combin"
 )
 
 type Combination struct {
-	cache   map[int]map[int]int
+	cache   map[int]map[int]uint64
 	updated time.Time // this is used to check for improver caching.
 }
 
 func NewCombination() *Combination {
-	c := make(map[int]map[int]int)
+	c := make(map[int]map[int]uint64)
 
 	return &Combination{
 		cache: c,
 	}
 }
 
-func (c *Combination) Choose(n, k int) int {
+func (c *Combination) Choose(n, k int) uint64 {
+	// base case
+	if k == 0 {
+		return 1
+	}
+
 	// first check the cache
 	nmap, ok := c.cache[n]
 
 	// if map for key n does not exist, create one, compute nCk, add it as value for key k, and return nCk
 	if !ok {
-		newNmap := make(map[int]int)
-		value := combin.Binomial(n, k)
+		newNmap := make(map[int]uint64)
+		value := c.Choose(n-1, k-1) * uint64(n) / uint64(k)
 		newNmap[k] = value
 		c.cache[n] = newNmap
 		c.updated = time.Now()
@@ -38,7 +41,7 @@ func (c *Combination) Choose(n, k int) int {
 
 	// if there is no value for key k, compute nCk, add it as value for key k, and return nCk
 	if !ok {
-		value := combin.Binomial(n, k)
+		value := c.Choose(n-1, k-1) * uint64(n) / uint64(k)
 		nmap[k] = value
 		c.updated = time.Now()
 		return value
