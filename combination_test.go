@@ -14,9 +14,9 @@ func TestChoose(t *testing.T) {
 func TestChooseBigNumber(t *testing.T) {
 	c := NewCombination()
 
-	v := c.Choose(90, 17)
-	if v != uint64(934433788613079150) {
-		t.Errorf("Comination was incorrect, got %v, want %v.", v, uint64(934433788613079150))
+	v := c.Choose(90, 18)
+	if v != uint64(3789648142708598775) {
+		t.Errorf("Choose(90, 18) is incorrect, got %v, want %v.", v, uint64(3789648142708598775))
 	}
 }
 
