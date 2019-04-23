@@ -1,13 +1,16 @@
 package combination
 
-import "testing"
+import (
+	"math/big"
+	"testing"
+)
 
 func TestChoose(t *testing.T) {
 	c := NewCombination()
 
 	v := c.Choose(10, 2)
-	if v != 45 {
-		t.Errorf("Combination was incorrect, got %d, want %d.", v, 45)
+	if v.Cmp(big.NewInt(45)) != 0 {
+		t.Errorf("Combination was incorrect, got %d, want %d.", v.Uint64(), 45)
 	}
 }
 
@@ -15,7 +18,7 @@ func TestChooseBigNumber(t *testing.T) {
 	c := NewCombination()
 
 	v := c.Choose(90, 18)
-	if v != uint64(3789648142708598775) {
+	if v.Cmp(big.NewInt(3789648142708598775)) != 0 {
 		t.Errorf("Choose(90, 18) is incorrect, got %v, want %v.", v, uint64(3789648142708598775))
 	}
 }
@@ -66,8 +69,8 @@ func TestRepeatedCache(t *testing.T) {
 	y := c.Choose(12, 2)
 	z := c.Choose(10, 2)
 
-	if x != z {
-		t.Errorf("Repeated calls to Choose(x, y) should return the same value. Wanted %d and %d, got %d and %d.", 45, 45, x, y)
+	if x.Cmp(&z) != 0 {
+		t.Errorf("Repeated calls to Choose(x, y) should return the same value. Wanted %d and %d, got %d and %d.", 45, 45, x.Uint64(), y.Uint64())
 	}
 }
 
